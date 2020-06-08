@@ -1,6 +1,5 @@
 # TODOS
 ## Registration/Application
-- Send emails to admin and customer
 - Create function to approve appplications and hence add them to users in the admin site
 
 ## Dashboard

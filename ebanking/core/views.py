@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 # from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.views.generic.edit import FormView
 
 from core.forms import ApplicationForm
@@ -17,16 +18,20 @@ class RegisterView(FormView):
     success_url = '/register/application_recieved/'
 
     def form_valid(self, form):
+        data = form.cleaned_data
+        print(data)
         form.save()
         
-        # TODO: send mail to admin and applicant
+        applicant_mail = data.get('email')
+        first_name = data.get("firstname")
+        last_name = data.get("lastname")
+        applicant_message = f'Dear {first_name} {last_name},\nYour application has been recieved and is being reviewed.\nYou will be notified as soon as it has been approved.'
+        admin_message = f'{first_name} {last_name} just submitted an application.\nReview and approve on the admin panel'
         
-        return super().form_valid(form)
+        send_mail('Application Recieved', applicant_message, 'localhost', [applicant_mail])
+        send_mail('New Application', admin_message, 'localhost', ['admin@site.com'])
 
-    def form_invalid(self, form):
-        print(form.cleaned_data)
-        print(form.errors)
-        return super().form_invalid(form)
+        return super(RegisterView, self).form_valid(form)
 
 
 def application_recieved(request):

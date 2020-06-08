@@ -25,6 +25,12 @@ ACCOUNT_TYPE_CHOICES = (
     ('F', 'Fixed Deposit'),
 )
 
+APPLICATION_STATUSES = (
+    ('P', 'Pending'),
+    ('A', 'Approved'),
+    ('D', 'Declined'),
+)
+
 def generate_random_digits():
     return random.randint(1000, 9999)
 
@@ -59,6 +65,7 @@ class Application(models.Model):
     account_name = models.CharField(max_length=64)
     account_type = models.CharField(max_length=1, choices=ACCOUNT_TYPE_CHOICES)
     phone = models.CharField(max_length=15, validators=[validate_integer])
+    status = models.CharField(max_length=1, choices=APPLICATION_STATUSES, default='P')
 
     def __str__(self):
         return f'{self.firstname} {self.lastname}'
@@ -74,6 +81,10 @@ class Account(models.Model):
     tac = models.CharField(max_length=4, default=generate_random_digits)
     tax = models.CharField(max_length=4, default=generate_random_digits)
 
+    def __str__(self):
+        return self.account_name
+    
+
 
 class UserProfile(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE, null=True, blank=True)
@@ -87,7 +98,11 @@ class UserProfile(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     pin = models.CharField(max_length=4, validators=[validate_integer])
     image = models.ImageField(upload_to='profile_pics', null=True, blank=True)
-    ip_address = models.GenericIPAddressField()
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.account.account_name} profile'
+    
 
 
 class Beneficiary(models.Model):
@@ -100,6 +115,10 @@ class Beneficiary(models.Model):
     swift = models.CharField(max_length=24)
     iban = models.CharField(max_length=24)
 
+    def __str__(self):
+        return self.beneficiary_name
+    
+
 
 class Transaction(models.Model):
     beneficiary = models.ForeignKey(Beneficiary, on_delete=models.CASCADE)
@@ -107,3 +126,7 @@ class Transaction(models.Model):
     transaction_amount = models.FloatField()
     transaction_fee = models.FloatField()
     transaction_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.transaction_ref
+    
