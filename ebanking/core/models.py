@@ -1,5 +1,6 @@
 import random
 import string
+from django.core.validators import validate_integer
 from django.db import models
 from django.contrib.auth import get_user_model
 from django_countries.fields import CountryField
@@ -14,7 +15,8 @@ MARITAL_STATUS_CHOICES = (
 
 GENDER_CHOICES = (
     ('M', 'Male'),
-    ('F', 'Female')
+    ('F', 'Female'),
+    ('N', 'Rather not say'),
 )
 
 ACCOUNT_TYPE_CHOICES = (
@@ -33,9 +35,18 @@ def generate_transaction_ref():
     return ''.join((random.choice(letter_and_digits) for i in range(string_length)))
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-    phone = models.CharField(max_length=15)
+def generate_account_number():
+    string_length = 10
+    digits = string.digits
+    return ''.join((random.choice(digits) for i in range(string_length)))
+
+
+class Application(models.Model):
+    firstname = models.CharField(max_length=24)
+    lastname = models.CharField(max_length=24)
+    email = models.EmailField()
+    username = models.CharField(max_length=24)
+    password = models.CharField(max_length=50)
     date_of_birth = models.DateField()
     address = models.CharField(max_length=255)
     country = CountryField()
@@ -43,28 +54,49 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=36)
     marital_status = models.CharField(max_length=1, choices=MARITAL_STATUS_CHOICES)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    pin = models.IntegerField()
-    image = models.ImageField(width_field=300, height_field=300, upload_to='profile_pics')
-    ip_address = models.GenericIPAddressField()
+    pin = models.CharField(max_length=4, validators=[validate_integer])
+    image = models.ImageField(upload_to='profile_pics', blank=True, null=True)
+    account_name = models.CharField(max_length=64)
+    account_type = models.CharField(max_length=1, choices=ACCOUNT_TYPE_CHOICES)
+    phone = models.CharField(max_length=15, validators=[validate_integer])
+
+    def __str__(self):
+        return f'{self.firstname} {self.lastname}'
+    
 
 
 class Account(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     account_name = models.CharField(max_length=64)
-    account_number = models.IntegerField()
+    account_number = models.CharField(max_length=10, default=generate_account_number, validators=[validate_integer])
     account_type = models.CharField(max_length=1, choices=ACCOUNT_TYPE_CHOICES)
-    account_balance = models.FloatField()
+    account_balance = models.FloatField(default=0)
     tac = models.CharField(max_length=4, default=generate_random_digits)
     tax = models.CharField(max_length=4, default=generate_random_digits)
 
 
+class UserProfile(models.Model):
+    account = models.OneToOneField(Account, on_delete=models.CASCADE, null=True, blank=True)
+    phone = models.CharField(max_length=15, validators=[validate_integer])
+    date_of_birth = models.DateField()
+    address = models.CharField(max_length=255)
+    country = CountryField()
+    state = models.CharField(max_length=36)
+    city = models.CharField(max_length=36)
+    marital_status = models.CharField(max_length=1, choices=MARITAL_STATUS_CHOICES)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    pin = models.CharField(max_length=4, validators=[validate_integer])
+    image = models.ImageField(upload_to='profile_pics', null=True, blank=True)
+    ip_address = models.GenericIPAddressField()
+
+
 class Beneficiary(models.Model):
     beneficiary_name = models.CharField(max_length=64)
-    beneficiary_phone = models.CharField(max_length=15)
+    beneficiary_phone = models.CharField(max_length=15, validators=[validate_integer])
     beneficiary_address = models.CharField(max_length=255)
     beneficiary_email = models.EmailField()
     beneficiary_bank = models.CharField(max_length=64)
-    beneficiary_account = models.IntegerField()
+    beneficiary_account = models.CharField(max_length=15, validators=[validate_integer])
     swift = models.CharField(max_length=24)
     iban = models.CharField(max_length=24)
 

@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register{% endblock title %}
+
+
+{% block extra_styles %}
+  <!-- Custom fonts for this template-->
+  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+  <!-- Date-tim picker style -->
+  <link rel="stylesheet" href="{% static 'css/jquery.datetimepicker.min.css' %}"/>
+
+{% endblock extra_styles %}
+  
+
+{% block content %}
+  <div class="container">
+
+    <div class="card o-hidden border-0 shadow-lg my-5">
+      <div class="card-body p-0">
+        <!-- Nested Row within Card Body -->
+        <div class="row">
+          <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+          <div class="col-lg-7">
+            <div class="p-5">
+              <div class="text-center">
+                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+              </div>
+              <form class="user" method="POST">
+                {% csrf_token %}
+                <legend>
+                  Personal Information
+                  <span style="color: red;">*</span>
+                </legend>
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    {{ form.firstname }}
+
+                    {% if form.errors.firstname %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.firstname}}
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="col-sm-6">
+                    {{ form.lastname }}
+
+                    {% if form.errors.lastname %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.lastname}}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    {{ form.email }}
+
+                    {% if form.errors.email %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.email}}
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="col-sm-6">
+                    {{ form.phone }}
+
+                    {% if form.errors.phone %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.phone}}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    <label class="mr-2" for="gender">Gender</label>
+                    {{ form.gender }}
+
+                    {% if form.errors.gender %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.gender}}
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="mr-2" for="id_marital_status">Marital Status</label>
+                    {{ form.marital_status }}
+
+                    {% if form.errors.marital_status %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.marital_status}}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="form-group">
+                    {{ form.date_of_birth }}
+
+                    {% if form.errors.date_of_birth %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.date_of_birth}}
+                      </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.address }}
+
+                    {% if form.errors.address %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.address}}
+                      </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                  <label class="mr-2" for="id_country">Country</label>
+                    {{ form.country }}
+
+                    {% if form.errors.country %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.country}}
+                      </div>
+                    {% endif %}
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    {{ form.state }}
+
+                    {% if form.errors.state %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.state}}
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="col-sm-6">
+                    {{ form.city }}
+
+                    {% if form.errors.city %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.city}}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="mr-2" for="image">Passport</label>
+                  {{ form.image }}
+
+                  {% if form.errors.image %}
+                    <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                      {{form.errors.image}}
+                    </div>
+                  {% endif %}
+                </div>
+                <hr>
+                <legend>
+                  Account Information
+                  <span style="color: red;">*</span>
+                </legend>
+                <div class="form-group">
+                    {{ form.account_name }}
+
+                    {% if form.errors.account_name %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.account_name}}
+                      </div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                  <label class="mr-2" for="account_type">Account type</label>
+                  {{ form.account_type }}
+
+                  {% if form.errors.account_type %}
+                    <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                      {{form.errors.account_type}}
+                    </div>
+                  {% endif %}
+                </div>
+                <hr>
+                <legend>
+                  Security Information
+                  <span style="color: red;">*</span>
+                </legend>
+                <div class="form-group">
+                  {{ form.username }}
+
+                  {% if form.errors.username %}
+                    <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                      {{form.errors.username}}
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    {{ form.password }}
+
+                    {% if form.errors.password %}
+                    <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                      {{form.errors.password}}
+                    </div>
+                  {% endif %}
+                  </div>
+                  <div class="col-sm-6">
+                    {{ form.confirm_password }}
+
+                    {% if form.errors.confirm_password %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.confirm_password}}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    {{ form.pin }}
+
+                    {% if form.errors.pin %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.pin}}
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="col-sm-6">
+                    {{ form.confirm_pin }}
+
+                    {% if form.errors.confirm_pin %}
+                      <div style="color: rgb(212, 68, 68); text-align: center; font-size: xx-small">
+                        {{form.errors.confirm_pin}}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <hr>
+                <input class="btn btn-primary btn-user btn-block" type="submit" value="Register Account">
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+{% endblock content %}
+  
+  
+{% block extra_scripts %}
+  <!-- Bootstrap core JavaScript-->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+  <!-- Date time picker script -->
+  <script src="{% static 'js/jquery.datetimepicker.full.min.js' %}"></script>
+
+  <script>
+    $(function () {
+      $("#id_date_of_birth").datetimepicker({
+        format: 'd/m/Y',
+      });
+
+      
+    });
+  </script>
+
+{% endblock extra_scripts %}
+
+</html>

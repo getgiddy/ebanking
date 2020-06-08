@@ -4,11 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
-django-allauth = "*"
+Django = "*"
 django-crispy-forms = "*"
-pillow = "*"
+Pillow = "*"
 django-countries = "*"
+django-allauth = "*"
+python-dateutil = "*"
 
 [dev-packages]
 pylint = "*"
