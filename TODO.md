@@ -1,6 +1,7 @@
 # TODOS
 ## Registration/Application
-- Create function to approve appplications and hence add them to users in the admin site
+- Send mail to applicants on approval
+- Create function to decline applications and send emails to applicants
 
 ## Dashboard
 - Generate and add mock data for the dashboard
