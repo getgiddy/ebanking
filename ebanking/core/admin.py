@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, User
+from django.core.mail import send_mail
 from .models import (
     UserProfile,
     Account,
@@ -84,6 +85,10 @@ class ApplicationAdmin(admin.ModelAdmin):
             )
 
             profile.save()
+
+            msg = f'Dear {obj.firstname} {obj.lastname},\nYour application has been reviewed and approved.\nYou can now login to perform transactions.\n\n-Localhost.'
+
+            send_mail('Application approved', msg, 'localhost', [obj.email])
 
         queryset.update(status='A')
             

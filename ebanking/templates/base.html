@@ -20,6 +20,7 @@
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'custom_style.css' %}">
     
     {% block extra_styles %}
     {% endblock extra_styles %}
@@ -39,6 +40,7 @@
 
     <!-- ##### Header Area Start ##### -->
     <header class="header-area">
+        
         <!-- Top Header Area -->
         <div class="top-header-area">
             <div class="container h-100">
@@ -58,7 +60,15 @@
                 </div>
             </div>
         </div>
-
+        {% if messages %}
+            
+              {% for message in messages %}
+                <div class="alert alert-{{message.tags}}">
+                  {{message}}
+                </div>
+              {% endfor %}
+                
+        {% endif %}
         <!-- Navbar Area -->
         <div class="credit-main-menu" id="sticker">
             <div class="classy-nav-container breakpoint-off">
@@ -88,7 +98,7 @@
                                     <li><a href="services.html">News</a></li>
                                     <li><a href="contact.html">Contact</a></li>
                                     <li><a href="{% url 'register' %}">Register</a></li>
-                                    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                                    <li><a href="{% url 'account_login' %}">Login</a></li>
                                 </ul>
                             </div>
                             <!-- Nav End -->

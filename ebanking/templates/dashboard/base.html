@@ -1,4 +1,6 @@
 {% load static %}
+{% load crispy_forms_tags %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,6 +20,7 @@
 
   <!-- Custom styles for this template-->
   <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'custom_style.css' %}">
 
   {% block extra_styles %}
   {% endblock extra_styles %}
@@ -295,10 +298,18 @@
 
         </nav>
         <!-- End of Topbar -->
-
+        
         <!-- Begin Page Content -->
         <div class="container-fluid">
-
+          {% if messages %}
+            
+              {% for message in messages %}
+                <div class="alert alert-{{message.tags}}">
+                  {{message}}
+                </div>
+              {% endfor %}
+                
+          {% endif %}
           {% block content %}
           {% endblock content %}
 
@@ -341,8 +352,14 @@
         </div>
         <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="{% url 'account_logout' %}">Logout</a>
+          <form method="post" action="{% url 'account_logout' %}">
+              {% csrf_token %}
+              {% if redirect_field_value %}
+              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+              {% endif %}
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+              <button class='btn btn-primary' type="submit">{% trans 'Logout' %}</button>
+            </form>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ from django import forms
 from django.forms import ValidationError
 
 from allauth.account.forms import LoginForm
-from core.models import Application
+from core.models import Application, Transaction
 
 
 class ApplicationForm(forms.ModelForm):
@@ -184,3 +184,32 @@ class CustomLoginForm(LoginForm):
     
     def login(self, *args, **kwargs):
         return super(CustomLoginForm, self).login(*args, **kwargs)
+
+
+class DepositForm(forms.ModelForm):
+    
+    class Meta:
+        model = Transaction
+        fields = ("transaction_amount",)
+
+
+
+class TransferForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(TransferForm, self).__init__(*args, **kwargs)
+        self.fields['beneficiary'].required = True
+    
+    class Meta:
+        model = Transaction
+        fields = (
+            "beneficiary",
+            'transaction_amount',
+        )
+
+
+class WithdrawalForm(forms.ModelForm):
+    
+    class Meta:
+        model = Transaction
+        fields = ("transaction_amount",)

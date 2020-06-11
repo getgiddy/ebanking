@@ -81,9 +81,17 @@ class Account(models.Model):
     tac = models.CharField(max_length=4, default=generate_random_digits)
     tax = models.CharField(max_length=4, default=generate_random_digits)
 
+    def credit(self, amount):
+        self.account_balance += amount
+        self.save()
+
+    def debit(self, amount):
+        if self.account_balance >= amount:
+            self.account_balance -= amount
+            self.save()
+
     def __str__(self):
-        return self.account_name
-    
+        return self.account_name    
 
 
 class UserProfile(models.Model):
@@ -104,8 +112,8 @@ class UserProfile(models.Model):
         return f'{self.account.account_name} profile'
     
 
-
 class Beneficiary(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
     beneficiary_name = models.CharField(max_length=64)
     beneficiary_phone = models.CharField(max_length=15, validators=[validate_integer])
     beneficiary_address = models.CharField(max_length=255)
@@ -115,17 +123,30 @@ class Beneficiary(models.Model):
     swift = models.CharField(max_length=24)
     iban = models.CharField(max_length=24)
 
+    class Meta:
+        verbose_name_plural = 'Beneficiaries'
+
     def __str__(self):
         return self.beneficiary_name
     
 
+TRANSACTION_TYPES = (
+    ('C', 'Credit'),
+    ('D', 'Debit'),
+)
+
 
 class Transaction(models.Model):
-    beneficiary = models.ForeignKey(Beneficiary, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    beneficiary = models.ForeignKey(Beneficiary, on_delete=models.CASCADE, null=True, blank=True)
     transaction_ref = models.CharField(max_length=16, default=generate_transaction_ref)
+    transaction_type = models.CharField(max_length=1, choices=TRANSACTION_TYPES, default='D')
     transaction_amount = models.FloatField()
     transaction_fee = models.FloatField()
     transaction_date = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['-transaction_date']
 
     def __str__(self):
         return self.transaction_ref

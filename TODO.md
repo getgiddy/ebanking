@@ -1,17 +1,14 @@
 # TODOS
 ## Registration/Application
-- Send mail to applicants on approval
 - Create function to decline applications and send emails to applicants
 
 ## Dashboard
-- Generate and add mock data for the dashboard
-- Bring data into dashboard
 - Generate report
+- Profile
 
 ## Dashboard actions
-- Transfer
-- Withdraw
-- Deposit
+- Add beneficiary
+- Delete beneficiary
 
 ## Landing
 - Fix URLs

@@ -1,7 +1,33 @@
 {% extends 'dashboard/base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block content %}
 <!-- Page Heading -->
 <h1 class="h3 mb-0 text-gray-800">Deposit</h1>
+
+<!-- Outer Row -->
+<div class="row justify-content-center">
+
+    <div class="col-xl-10 col-lg-12 col-md-9">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                    <div class="col-lg-6">
+                        <div class="p-5">
+                            <form class="login" method="POST" action="{% url 'deposit' %}">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <button class="btn btn-primary" type="submit">Deposit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
